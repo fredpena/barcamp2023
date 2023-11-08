@@ -9,8 +9,8 @@
 - Además, cabe señalar que las mejores prácticas y las soluciones presentadas en esta charla pueden variar según los requisitos y las circunstancias específicas de cada proyecto. Recomiendo encarecidamente realizar pruebas exhaustivas y consultar con profesionales capacitados antes de implementar cualquier solución en un entorno de producción.
 - En resumen, mientras que esta presentación busca proporcionar información útil y práctica, el uso de las tecnologías y las decisiones de implementación son responsabilidad del usuario final. No asumo ninguna responsabilidad por los resultados derivados de la aplicación de los conceptos discutidos en esta presentación.
 
-  ### Recurso
-  [Presentación - Google Slide](https://docs.google.com/presentation/d/1bTXQc0ziBKF3JNxAsh3UVhRrp2zYXvAdOZqihMEx84M/edit?usp=sharing)
+  ### Recurso  
+  <a href="https://docs.google.com/presentation/d/1bTXQc0ziBKF3JNxAsh3UVhRrp2zYXvAdOZqihMEx84M/edit?usp=sharing" target="_blank">Presentación - Google Slide</a>
 
 
 
