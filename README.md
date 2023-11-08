@@ -1,1 +1,1 @@
-# barcamp2023
+# Unlocking the Power of Multi-tenancy (Spring Boot and Vaadin Flow)
