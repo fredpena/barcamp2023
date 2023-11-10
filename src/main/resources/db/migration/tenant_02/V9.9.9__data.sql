@@ -1,0 +1,38 @@
+INSERT INTO userr (username, "password", "name", email, last_login_ts, deleted, "locked", one_log_pwd,
+                   profile_picture, created_by, last_modified_by, created_date, last_modified_date)
+VALUES ('m.perez', '$2a$10$8c76Jfm15Ib7IOVh7l1DJOKtKUxeHvSlE/oj39W3uKbNyS3oK7BbK', 'Maria Perez',
+        'm.perez@fredpena.dev', NULL, FALSE, FALSE, FALSE, NULL, 'root', 'root', NOW(), NOW());
+
+
+INSERT INTO person(first_name, last_name, email, phone, date_of_birth, occupation, role, important, created_by,
+                   last_modified_by, created_date, last_modified_date)
+VALUES ('Eula', 'Lane', 'eula.lane@jigrormo.ye', '(762) 526-5961', '1954-04-03', 'Insurance Clerk', 'Worker',
+        false, 'root', 'root', NOW(), NOW()),
+       ('Barry', 'Rodriquez', 'barry.rodriquez@zun.mm', '(267) 955-5124', '2013-04-03', 'Mortarman', 'Manager',
+        false, 'root', 'root', NOW(), NOW()),
+       ('Eugenia', 'Selvi', 'eugenia.selvi@capfad.vn', '(680) 368-2192', '1973-03-19', 'Beer Coil Cleaner',
+        'External', true, 'root', 'root', NOW(), NOW()),
+       ('Alejandro', 'Miles', 'alejandro.miles@dec.bn', '(281) 301-2039', '2013-05-06', 'Scale Attendant',
+        'Worker', false, 'root', 'root', NOW(), NOW()),
+       ('Cora', 'Tesi', 'cora.tesi@bivo.yt', '(600) 616-7955', '1971-07-04', 'Clinical Audiologist', 'Supervisor',
+        true, 'root', 'root', NOW(), NOW()),
+       ('Marguerite', 'Ishii', 'marguerite.ishii@judbilo.gn', '(882) 813-1374', '1937-03-31',
+        'Parking Meter Collector', 'Supervisor', true, 'root', 'root', NOW(), NOW()),
+       ('Mildred', 'Jacobs', 'mildred.jacobs@joraf.wf', '(642) 665-1763', '1966-11-03', 'Business Unit Manager',
+        'Manager', false, 'root', 'root', NOW(), NOW()),
+       ('Gene', 'Goodman', 'gene.goodman@kem.tl', '(383) 458-2132', '2009-09-13', 'Technical Communicator',
+        'External', true, 'root', 'root', NOW(), NOW()),
+       ('Lettie', 'Bennett', 'lettie.bennett@odeter.bb', '(769) 335-6771', '1958-11-18',
+        'Correctional Officer Sergeant', 'Worker', false, 'root', 'root', NOW(), NOW()),
+       ('Mabel', 'Leach', 'mabel.leach@lisohuje.vi', '(803) 586-8035', '1945-10-25', 'Food Chemist',
+        'Supervisor', false, 'root', 'root', NOW(), NOW()),
+       ('Jordan', 'Miccinesi', 'jordan.miccinesi@duod.gy', '(531) 919-2280', '1981-12-06',
+        'Signals Intelligence/Electronic Warfare Chief', 'Manager', false, 'root', 'root', NOW(), NOW()),
+       ('Marie', 'Parkes', 'marie.parkes@nowufpus.ph', '(814) 667-8937', '1942-10-07', 'Language Pathologist',
+        'External', true, 'root', 'root', NOW(), NOW()),
+       ('Rose', 'Gray', 'rose.gray@kagu.hr', '(713) 311-8766', '1957-10-06', 'Wildlife Officer', 'Worker',
+        false, 'root', 'root', NOW(), NOW()),
+       ('Garrett', 'Stokes', 'garrett.stokes@fef.bg', '(381) 421-2371', '2008-07-17', 'Bindery Machine Operator',
+        'Manager', false, 'root', 'root', NOW(), NOW()),
+       ('Barbara', 'Matthieu', 'barbara.matthieu@derwogi.jm', '(940) 463-7299', '1929-07-13',
+        'Instructional Aide', 'External', true, 'root', 'root', NOW(), NOW());

@@ -1,50 +1,33 @@
 package dev.fredpena.barcamp.views;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.contextmenu.MenuItem;
-import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Header;
-import com.vaadin.flow.component.html.ListItem;
-import com.vaadin.flow.component.html.Nav;
-import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.html.UnorderedList;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.menubar.MenuBar;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
-import com.vaadin.flow.theme.lumo.LumoUtility.AlignItems;
-import com.vaadin.flow.theme.lumo.LumoUtility.BoxSizing;
-import com.vaadin.flow.theme.lumo.LumoUtility.Display;
-import com.vaadin.flow.theme.lumo.LumoUtility.FlexDirection;
-import com.vaadin.flow.theme.lumo.LumoUtility.FontSize;
-import com.vaadin.flow.theme.lumo.LumoUtility.FontWeight;
-import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
-import com.vaadin.flow.theme.lumo.LumoUtility.Height;
-import com.vaadin.flow.theme.lumo.LumoUtility.ListStyleType;
-import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
-import com.vaadin.flow.theme.lumo.LumoUtility.Overflow;
-import com.vaadin.flow.theme.lumo.LumoUtility.Padding;
-import com.vaadin.flow.theme.lumo.LumoUtility.TextColor;
-import com.vaadin.flow.theme.lumo.LumoUtility.Whitespace;
-import com.vaadin.flow.theme.lumo.LumoUtility.Width;
-import dev.fredpena.barcamp.data.User;
+import com.vaadin.flow.theme.lumo.LumoUtility.*;
+import dev.fredpena.barcamp.config.TenantContext;
+import dev.fredpena.barcamp.data.tenant.entity.User;
 import dev.fredpena.barcamp.security.AuthenticatedUser;
-import dev.fredpena.barcamp.views.about.AboutView;
-import dev.fredpena.barcamp.views.formulario.FormularioView;
-import dev.fredpena.barcamp.views.listado.ListadoView;
+import dev.fredpena.barcamp.views.person.PersonView;
+import org.springframework.util.StringUtils;
+import org.vaadin.lineawesome.LineAwesomeIcon;
+
 import java.io.ByteArrayInputStream;
 import java.util.Optional;
-import org.vaadin.lineawesome.LineAwesomeIcon;
 
 /**
  * The main view is a top-level placeholder for other views.
  */
-public class MainLayout extends AppLayout {
+public class MainLayout extends AppLayout implements BeforeEnterObserver {
 
     /**
      * A simple navigation item component, based on ListItem element.
@@ -91,76 +74,93 @@ public class MainLayout extends AppLayout {
 
     private Component createHeaderContent() {
         Header header = new Header();
-        header.addClassNames(BoxSizing.BORDER, Display.FLEX, FlexDirection.COLUMN, Width.FULL);
 
-        Div layout = new Div();
-        layout.addClassNames(Display.FLEX, AlignItems.CENTER, Padding.Horizontal.LARGE);
+        if (StringUtils.hasText(TenantContext.getCurrentTenant())) {
+            header.addClassNames(BoxSizing.BORDER, Display.FLEX, FlexDirection.COLUMN, Width.FULL);
 
-        H1 appName = new H1("BarCamp2023");
-        appName.addClassNames(Margin.Vertical.MEDIUM, Margin.End.AUTO, FontSize.LARGE);
-        layout.add(appName);
+            Div layout = new Div();
+            layout.addClassNames(Display.FLEX, AlignItems.CENTER, Padding.Horizontal.LARGE);
 
-        Optional<User> maybeUser = authenticatedUser.get();
-        if (maybeUser.isPresent()) {
-            User user = maybeUser.get();
+            H1 appName = new H1("BarCamp - 2023");
+            appName.addClassNames(Margin.Vertical.MEDIUM, Margin.End.AUTO, FontSize.LARGE);
+            layout.add(appName);
 
-            Avatar avatar = new Avatar(user.getName());
-            StreamResource resource = new StreamResource("profile-pic",
-                    () -> new ByteArrayInputStream(user.getProfilePicture()));
-            avatar.setImageResource(resource);
-            avatar.setThemeName("xsmall");
-            avatar.getElement().setAttribute("tabindex", "-1");
+            Optional<User> maybeUser = authenticatedUser.get();
+            if (maybeUser.isPresent()) {
+                User user = maybeUser.get();
 
-            MenuBar userMenu = new MenuBar();
-            userMenu.setThemeName("tertiary-inline contrast");
+                Avatar avatar = new Avatar(user.getName());
+                StreamResource resource = new StreamResource("profile-pic",
+                        () -> new ByteArrayInputStream(user.getProfilePicture() != null ? user.getProfilePicture() : new byte[]{}));
+                avatar.setImageResource(resource);
+                avatar.setThemeName("xsmall");
+                avatar.getElement().setAttribute("tabindex", "-1");
 
-            MenuItem userName = userMenu.addItem("");
-            Div div = new Div();
-            div.add(avatar);
-            div.add(user.getName());
-            div.add(new Icon("lumo", "dropdown"));
-            div.getElement().getStyle().set("display", "flex");
-            div.getElement().getStyle().set("align-items", "center");
-            div.getElement().getStyle().set("gap", "var(--lumo-space-s)");
-            userName.add(div);
-            userName.getSubMenu().addItem("Sign out", e -> {
-                authenticatedUser.logout();
-            });
+                MenuBar userMenu = new MenuBar();
+                userMenu.setThemeName("tertiary-inline contrast");
 
-            layout.add(userMenu);
-        } else {
-            Anchor loginLink = new Anchor("login", "Sign in");
-            layout.add(loginLink);
-        }
+                MenuItem userName = userMenu.addItem("");
 
-        Nav nav = new Nav();
-        nav.addClassNames(Display.FLEX, Overflow.AUTO, Padding.Horizontal.MEDIUM, Padding.Vertical.XSMALL);
+                authenticatedUser.userHasSomeTenant().ifPresent(some -> {
+                    if (some) {
+                        userName.getSubMenu().addItem("Change company", e -> {
+                            authenticatedUser.clearSession();
+                            UI.getCurrent().navigate("");
+                        });
+                    }
+                });
 
-        // Wrap the links in a list; improves accessibility
-        UnorderedList list = new UnorderedList();
-        list.addClassNames(Display.FLEX, Gap.SMALL, ListStyleType.NONE, Margin.NONE, Padding.NONE);
-        nav.add(list);
+                Div div = new Div();
+                div.add(avatar);
+                div.add(user.getName());
+                div.add(new Icon("lumo", "dropdown"));
+                div.getElement().getStyle().set("display", "flex");
+                div.getElement().getStyle().set("align-items", "center");
+                div.getElement().getStyle().set("gap", "var(--lumo-space-s)");
+                userName.add(div);
+                userName.getSubMenu().addItem("Sign out", e -> authenticatedUser.logout());
 
-        for (MenuItemInfo menuItem : createMenuItems()) {
-            if (accessChecker.hasAccess(menuItem.getView())) {
-                list.add(menuItem);
+
+                layout.add(userMenu);
+            } else {
+                Anchor loginLink = new Anchor("login", "Sign in");
+                layout.add(loginLink);
             }
 
+            Nav nav = new Nav();
+            nav.addClassNames(Display.FLEX, Overflow.AUTO, Padding.Horizontal.MEDIUM, Padding.Vertical.XSMALL);
+
+            // Wrap the links in a list; improves accessibility
+            UnorderedList list = new UnorderedList();
+            list.addClassNames(Display.FLEX, Gap.SMALL, ListStyleType.NONE, Margin.NONE, Padding.NONE);
+            nav.add(list);
+
+            for (MenuItemInfo menuItem : createMenuItems()) {
+                if (accessChecker.hasAccess(menuItem.getView())) {
+                    list.add(menuItem);
+                }
+
+            }
+
+            header.add(layout, nav);
         }
 
-        header.add(layout, nav);
         return header;
     }
 
     private MenuItemInfo[] createMenuItems() {
         return new MenuItemInfo[]{ //
-                new MenuItemInfo("About", LineAwesomeIcon.FILE.create(), AboutView.class), //
 
-                new MenuItemInfo("Formulario", LineAwesomeIcon.USER.create(), FormularioView.class), //
-
-                new MenuItemInfo("Listado", LineAwesomeIcon.FILTER_SOLID.create(), ListadoView.class), //
+                new MenuItemInfo("Persons", LineAwesomeIcon.USER.create(), PersonView.class), //
 
         };
+    }
+
+    @Override
+    public void beforeEnter(BeforeEnterEvent event) {
+        if (!StringUtils.hasText(TenantContext.getCurrentTenant())) {
+            event.forwardTo("");
+        }
     }
 
 }

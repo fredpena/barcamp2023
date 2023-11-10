@@ -1,4 +1,6 @@
 FROM eclipse-temurin:17-jre
-COPY target/*.jar app.jar
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+MAINTAINER fredpena.dev
+COPY target/barcamp.jar barcamp.jar
+EXPOSE 32531
+ENTRYPOINT ["java", "-jar", "/barcamp.jar"]
+

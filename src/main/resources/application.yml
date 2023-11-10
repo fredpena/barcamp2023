@@ -1,0 +1,61 @@
+logging:
+  level:
+    org:
+      atmosphere: warn
+
+server:
+  port: ${PORT:60269}
+
+vaadin:
+  whitelisted-packages: com.vaadin,org.vaadin,dev.hilla,dev.fredpena.barcamp
+  # Launch the default browser when starting the application in development mode
+  launch-browser: true
+
+spring:
+  flyway:
+    enabled: false
+    baseline-on-migrate: true
+    validate-migration-naming: true
+  jpa:
+    show-sql: false
+    properties:
+      org:
+        hibernate:
+          envers:
+            audit_table_suffix: _log
+            store_data_at_delete: true
+
+  mustache:
+    check-template-location: false
+
+
+  # PostgreSQL configuration.
+  datasource:
+    password: ${DB_PASSWORD:postgres}
+    username: ${DB_USER:postgres}
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:barcamp}
+    driver-class-name: org.postgresql.Driver
+
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  flyway:
+    enabled: false
+    locations: [ classpath:db/migration/dev ] #, filesystem:./sql
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+
+  devtools:
+    restart:
+      enabled: true  # Set to enable hot deployment
+      additional-paths: src/main/java # restart directory
+      quiet-period: 1s
+      poll-interval: 2s
+      log-condition-evaluation-delta: false
+

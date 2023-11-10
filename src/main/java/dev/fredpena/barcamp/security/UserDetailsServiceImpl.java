@@ -1,9 +1,11 @@
 package dev.fredpena.barcamp.security;
 
-import dev.fredpena.barcamp.data.User;
-import dev.fredpena.barcamp.data.UserRepository;
-import java.util.List;
-import java.util.stream.Collectors;
+import dev.fredpena.barcamp.data.common.entity.CommonUser;
+import dev.fredpena.barcamp.data.common.entity.Tenant;
+import dev.fredpena.barcamp.data.common.service.CommonUserService;
+import dev.fredpena.barcamp.data.common.service.TenantService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,30 +14,40 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Set;
+
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final CommonUserService commonUserService;
+    private final TenantService tenantService;
 
-    public UserDetailsServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
+
+        CommonUser user = commonUserService.findUser(username);
         if (user == null) {
             throw new UsernameNotFoundException("No user present with username: " + username);
-        } else {
-            return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getHashedPassword(),
-                    getAuthorities(user));
         }
+
+        Set<Tenant> tenants = tenantService.findTenantByUser(user.getUsername());
+        if (tenants == null || tenants.isEmpty()) {
+            throw new UsernameNotFoundException("No tenant present with username: " + username);
+        }
+
+        log.info("User information: {}", user);
+        log.info("Tenant present: {}", tenants.size());
+
+        return new CustomUserDetails(user, tenants, true, getAuthorities(user));
     }
 
-    private static List<GrantedAuthority> getAuthorities(User user) {
-        return user.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role))
-                .collect(Collectors.toList());
+    private static List<GrantedAuthority> getAuthorities(CommonUser user) {
+        return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
     }
 
