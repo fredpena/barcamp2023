@@ -28,7 +28,6 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.spring.data.VaadinSpringDataHelpers;
 import com.vaadin.flow.theme.lumo.LumoIcon;
 import com.vaadin.flow.theme.lumo.LumoUtility;
@@ -143,7 +142,7 @@ public class PersonView extends Div {
             Button addBtn = new Button("New Person", VaadinIcon.PLUS.create());
             addBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
             addBtn.addClickListener(event -> {
-                Dialog dialog = formView.createDialog("New Person", null);
+                Dialog dialog = formView.createDialog("New Person", null, PersonView.this::refreshGrid);
                 dialog.open();
                 add(dialog);
             });
@@ -239,7 +238,7 @@ public class PersonView extends Div {
             if (!importants.isEmpty()) {
                 List<Predicate> rolePredicates = new ArrayList<>();
                 for (Boolean important : importants.getValue()) {
-                    rolePredicates.add(criteriaBuilder.equal(criteriaBuilder.literal(important), root.get( "important")));
+                    rolePredicates.add(criteriaBuilder.equal(criteriaBuilder.literal(important), root.get("important")));
                 }
                 predicates.add(criteriaBuilder.or(rolePredicates.toArray(Predicate[]::new)));
             }
@@ -268,8 +267,7 @@ public class PersonView extends Div {
 
 
     private void edit(Person r) {
-
-        Dialog dialog = formView.createDialog("Edit Person", r);
+        Dialog dialog = formView.createDialog("Edit Person", r, this::refreshGrid);
         dialog.open();
         add(dialog);
     }

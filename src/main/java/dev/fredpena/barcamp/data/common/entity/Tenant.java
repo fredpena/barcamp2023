@@ -26,9 +26,45 @@ public class Tenant implements Serializable {
     private String tenantId;
 
     @NotNull
-    @Column(length = 50)
-    @Length(message = "Este campo no puede estar vacío", min = 1, max = 50)
+    @Column(length = 100)
+    @Length(message = "Este campo no puede estar vacío", min = 1, max = 100)
     private String name;
+
+    @NotNull
+    @Column(length = 100)
+    @Length(message = "Este campo no puede estar vacío", min = 1, max = 100)
+    private String slogan;
+
+    @NotNull
+    @Column(length = 100)
+    @Length(message = "Este campo no puede estar vacío", min = 1, max = 100)
+    private String type;
+
+
+    @NotNull
+    @Column(length = 100)
+    @Length(message = "Este campo no puede estar vacío", min = 1, max = 100)
+    private String phone;
+
+    @NotNull
+    @Column(length = 100)
+    @Length(message = "Este campo no puede estar vacío", min = 1, max = 100)
+    private String email;
+
+    @NotNull
+    @Column(length = 100)
+    @Length(message = "Este campo no puede estar vacío", min = 1, max = 100)
+    private String website;
+
+    @NotNull
+    @Column(length = 100)
+    @Length(message = "Este campo no puede estar vacío", min = 1, max = 100)
+    private String address;
+
+    @NotNull
+    @Column(length = 100)
+    @Length(message = "Este campo no puede estar vacío", min = 1, max = 100)
+    private String logo;
 
     @JsonIgnore
     @OneToMany(mappedBy = "tenant")

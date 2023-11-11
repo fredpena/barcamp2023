@@ -47,7 +47,7 @@ public class FormView {
     private final Button delete = new Button("Delete");
     private final Button cancel = new Button("Cancel");
     private final Button save = new Button("Save");
-private final HtmlContainer parent;
+    private final HtmlContainer parent;
     private final PersonService personService;
     private final CustomNotification notification;
     private Person element;
@@ -127,7 +127,7 @@ private final HtmlContainer parent;
         confirmation.show(parent);
     }
 
-    public Dialog createDialog(String title, Person element) {
+    public Dialog createDialog(String title, Person element, Runnable reload) {
         this.element = element;
         binder.setBean(element);
         delete.setVisible(element != null);
@@ -141,7 +141,10 @@ private final HtmlContainer parent;
         dialog.setHeaderTitle(title);
         dialog.add(createFormLayout(), new Hr(), createButtonLayout());
 
-        cancel.addClickListener(event -> dialog.close());
+        cancel.addClickListener(event -> {
+            dialog.close();
+            reload.run();
+        });
 
         return dialog;
     }

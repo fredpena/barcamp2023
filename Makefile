@@ -81,6 +81,8 @@ else
 	@./mvnw
 endif
 
+start : restart
+
 restart-with-backup: clean
 	@echo '${GREEN}Restart docker image with backup ${RESET}'$(PROJECT_NAME)
 	@echo '${GREEN}Waiting for docker ${RESET}'$(PROJECT_NAME)

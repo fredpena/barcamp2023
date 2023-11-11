@@ -61,8 +61,8 @@ public class MainLayout extends AppLayout implements BeforeEnterObserver {
 
     }
 
-    private AuthenticatedUser authenticatedUser;
-    private AccessAnnotationChecker accessChecker;
+    private final transient AuthenticatedUser authenticatedUser;
+    private final transient AccessAnnotationChecker accessChecker;
 
     public MainLayout(AuthenticatedUser authenticatedUser, AccessAnnotationChecker accessChecker) {
         this.authenticatedUser = authenticatedUser;

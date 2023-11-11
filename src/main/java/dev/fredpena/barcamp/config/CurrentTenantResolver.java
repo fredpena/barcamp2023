@@ -24,7 +24,7 @@ public class CurrentTenantResolver implements CurrentTenantIdentifierResolver, H
             log.info("Schema: {}", tenant);
             return tenant;
         }
-        log.info("Schema: {}", DEFAULT);
+//        log.info("Schema: {}", DEFAULT);
         return DEFAULT;
     }
 

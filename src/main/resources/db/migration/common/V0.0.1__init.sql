@@ -13,7 +13,14 @@ CREATE TABLE common_user
 CREATE TABLE tenant
 (
     tenant_id varchar(255) NOT NULL,
-    "name"    varchar(50)  NOT NULL,
+    "name"    varchar(100) NOT NULL,
+    slogan    varchar(100) NOT NULL,
+    "type"    varchar(100) NOT NULL,
+    phone     varchar(100) NOT NULL,
+    email     varchar(100) NOT NULL,
+    website   varchar(100) NOT NULL,
+    address   varchar(100) NOT NULL,
+    logo      varchar(100) NOT NULL,
     CONSTRAINT tenant_pkey PRIMARY KEY (tenant_id)
 );
 CREATE INDEX idxdcxf3ksi0gyn1tieeq0id96lm ON tenant USING btree (name);

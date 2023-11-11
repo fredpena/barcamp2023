@@ -1,12 +1,12 @@
 package dev.fredpena.barcamp.data.tenant.service;
 
 import dev.fredpena.barcamp.data.tenant.entity.Person;
-import dev.fredpena.barcamp.data.tenant.service.PersonRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,6 +38,10 @@ public class PersonService {
 
     public Page<Person> list(Pageable pageable, Specification<Person> filter) {
         return repository.findAll(filter, pageable);
+    }
+
+    public List<Person> findAll() {
+        return repository.findAll();
     }
 
     public int count() {
